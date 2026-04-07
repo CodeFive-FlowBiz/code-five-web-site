@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowBiz — Digitalna isprava u minutima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0E1629;--navy2:#162035;--navy3:#1E2D4A;
+  --ink:#0F1117;--ink2:#3C4257;--ink3:#7B82A0;
+  --line:#E4E7F0;--bg:#F4F6FC;--card:#FFFFFF;
+  --accent:#2B5CE6;--accent2:#1A45C8;--accent-bg:#EEF3FF;
+  --green:#0D9E6A;--green-bg:#E8FBF4;
+  --red:#D93025;--red-bg:#FEF2F1;
+  --amber:#C97B10;--amber-bg:#FEF8EC;
+  --slate:#64748B;
+  --sans:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+}
+html{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;height:60px;background:rgba(244,246,252,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{height:36px;width:auto}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-0.02em}
+.nav-logo-text span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:13.5px;color:var(--ink3);text-decoration:none;font-weight:400;transition:color .15s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--accent);color:#fff;font-size:13px;font-weight:600;padding:9px 20px;border-radius:8px;text-decoration:none;transition:background .15s}
+.nav-cta:hover{background:var(--accent2)}
+
+/* ── HERO ── */
+.hero{position:relative;overflow:hidden;padding:88px 0 80px;background:var(--bg)}
+.hero-grid-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.hero-inner{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-pill{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-bg);border:1px solid rgba(43,92,230,0.18);padding:5px 12px;border-radius:20px;margin-bottom:1.5rem}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+h1{font-size:clamp(2.2rem,3.8vw,3.3rem);font-weight:700;line-height:1.08;letter-spacing:-0.04em;color:var(--ink);margin-bottom:1.25rem}
+h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:16px;color:var(--ink2);line-height:1.75;font-weight:400;margin-bottom:2rem;max-width:400px;letter-spacing:-0.01em}
+.hero-btns{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn-fill{background:var(--accent);color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;transition:background .15s}
+.btn-fill:hover{background:var(--accent2)}
+.btn-outline{color:var(--ink2);text-decoration:none;font-size:14px;font-weight:500;border:1px solid var(--line);padding:11px 20px;border-radius:8px;transition:all .15s;background:var(--card)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.hero-trust{display:flex;align-items:center;gap:8px;margin-top:1.75rem;font-size:11.5px;color:var(--ink3)}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* Hero app mockup */
+.app-mock{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 4px 6px rgba(15,22,41,0.04),0 12px 40px rgba(15,22,41,0.08)}
+.mock-bar{background:#F7F8FC;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;align-items:center;gap:8px}
+.dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#FF5F56}.dot-y{background:#FFBD2E}.dot-g{background:#27C93F}
+.mock-label{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.04em;text-transform:uppercase;margin-left:4px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.kpi{background:var(--card);padding:12px 14px}
+.kv{font-size:21px;font-weight:700;line-height:1;letter-spacing:-0.03em}
+.kv-r{color:var(--red)}.kv-a{color:var(--amber)}.kv-g{color:var(--green)}.kv-s{color:var(--ink3)}
+.kl{font-size:10px;color:var(--ink3);margin-top:3px}
+.tbar{background:#FAFBFF;border-bottom:1px solid var(--line);padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+.tbar-t{font-size:12px;font-weight:600;color:var(--ink)}
+.tag{font-size:10.5px;padding:3px 8px;border-radius:5px;font-weight:500}
+.tag-g{background:var(--green-bg);color:var(--green)}
+.tag-b{background:var(--accent-bg);color:var(--accent)}
+.tag-a{background:var(--amber-bg);color:var(--amber)}
+.tag-r{background:var(--red-bg);color:var(--red)}
+table.mt{width:100%;border-collapse:collapse}
+table.mt th{font-size:10px;font-weight:600;color:var(--ink3);text-align:left;padding:6px 14px;border-bottom:1px solid var(--line);letter-spacing:.05em;text-transform:uppercase}
+table.mt td{font-size:12px;padding:8px 14px;border-bottom:1px solid var(--line);color:var(--ink2)}
+table.mt tr:last-child td{border-bottom:none}
+table.mt tr:hover td{background:var(--bg)}
+.td-b{font-weight:600;color:var(--ink)!important}
+.wf-bar{padding:8px 14px;border-top:1px solid var(--line);background:#FAFBFF;display:flex;align-items:center;justify-content:space-between}
+.wf-mono{font-size:11px;letter-spacing:2px;font-family:monospace;color:var(--ink)}
+.wf-mono .em{color:var(--line)}
+.wf-tag{font-size:10.5px;color:var(--accent);font-weight:600}
+
+/* ── STRIP ── */
+.strip{background:#2C3E6B;padding:36px 0}
+.strip-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.strip-text{font-size:13.5px;color:#fff;letter-spacing:-0.01em;font-weight:600}
+.strip-text strong{color:#fff;font-weight:600}
+.strip-icons{display:flex;gap:2.5rem}
+.strip-icon{display:flex;align-items:center;gap:9px;font-size:12px;color:#fff;font-weight:600}
+.strip-icon svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ── FEATURES ── */
+.section{padding:80px 0}
+.section-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+.sec-h{font-size:clamp(1.7rem,2.8vw,2.4rem);font-weight:700;letter-spacing:-0.035em;color:var(--ink);line-height:1.15;margin-bottom:.75rem}
+.sec-p{font-size:15px;color:var(--ink2);line-height:1.7;max-width:460px;letter-spacing:-0.01em}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:2.5rem}
+.feat{background:var(--card);padding:1.75rem 1.5rem;transition:background .15s}
+.feat:hover{background:#F7F9FF}
+.feat-ico{width:36px;height:36px;border-radius:9px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem}
+.feat-ico svg{width:17px;height:17px;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feat h3{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:.4rem;letter-spacing:-0.01em}
+.feat p{font-size:13px;color:var(--ink3);line-height:1.65}
+
+/* ── CAROUSEL SECTION ── */
+.carousel-section{background:#2C3E6B;padding:90px 0;overflow:hidden}
+.carousel-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem}
+.carousel-section .eyebrow{color:#93B9FF}
+.carousel-section .sec-h{color:#fff}
+.carousel-section .sec-p{color:rgba(255,255,255,0.42)}
+
+/* Tab bar */
+.c-tabs{display:flex;gap:2px;margin-top:2.5rem;margin-bottom:2rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:3px}
+.c-tab{flex:1;padding:9px 12px;border-radius:7px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.35);cursor:pointer;border:none;background:transparent;transition:all .2s;text-align:center;letter-spacing:-0.01em;white-space:nowrap}
+.c-tab.on{background:rgba(255,255,255,0.09);color:#fff}
+.c-tab:hover:not(.on){color:rgba(255,255,255,0.6)}
+
+/* Panels */
+.c-panel{display:none}
+.c-panel.on{display:grid;grid-template-columns:1fr 1.65fr;gap:3rem;align-items:start}
+
+.c-info{}
+.c-num{font-size:10.5px;font-weight:700;color:#93B9FF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+.c-title{font-size:1.35rem;font-weight:700;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:.75rem}
+.c-desc{font-size:13.5px;color:rgba(255,255,255,0.42);line-height:1.72;letter-spacing:-0.01em;margin-bottom:1.5rem}
+.c-pts{display:flex;flex-direction:column;gap:.55rem}
+.c-pt{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,0.5)}
+.c-pt-dot{width:5px;height:5px;border-radius:50%;background:#93B9FF;margin-top:6px;flex-shrink:0}
+
+/* Browser frame */
+.browser{background:#1A2340;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.45),0 0 0 1px rgba(255,255,255,0.04)}
+.browser-bar{background:#111827;border-bottom:1px solid rgba(255,255,255,0.06);padding:9px 14px;display:flex;align-items:center;gap:10px}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:9px;height:9px;border-radius:50%}
+.b-dot-r{background:#FF5F56}.b-dot-y{background:#FFBD2E}.b-dot-g{background:#27C93F}
+.b-url{flex:1;background:rgba(255,255,255,0.05);border-radius:5px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,0.22);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b-img{width:100%;display:block;max-height:440px;object-fit:cover;object-position:top}
+
+/* PDF card style */
+.pdf-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.pdf-header{background:var(--navy3);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.pdf-header-title{font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);letter-spacing:.08em;text-transform:uppercase}
+.pdf-header-badge{font-size:10.5px;padding:3px 10px;border-radius:4px;font-weight:600;background:rgba(13,158,106,0.2);color:#4ADEAA}
+.pdf-body{padding:16px 20px;font-size:11.5px;color:var(--ink2);line-height:1.65}
+.pdf-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line)}
+.pdf-row:last-child{border-bottom:none}
+.pdf-key{color:var(--ink3);font-weight:400}
+.pdf-val{font-weight:600;color:var(--ink);text-align:right}
+.pdf-section{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:12px 0 6px}
+.pdf-table{width:100%;border-collapse:collapse;font-size:11px}
+.pdf-table th{font-size:10px;color:var(--ink3);text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.pdf-table td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink2)}
+.pdf-table tr:last-child td{border-bottom:none}
+.pdf-verdict{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:10px 14px;border-radius:7px;background:var(--green-bg);border:1px solid rgba(13,158,106,0.2)}
+.pdf-verdict-label{font-size:11px;font-weight:600;color:var(--green);letter-spacing:.04em;text-transform:uppercase}
+.pdf-verdict-val{font-size:14px;font-weight:700;color:var(--green)}
+.pdf-verdict.nok{background:var(--red-bg);border-color:rgba(217,48,37,0.2)}
+.pdf-verdict.nok .pdf-verdict-label,.pdf-verdict.nok .pdf-verdict-val{color:var(--red)}
+
+/* Nav dots */
+.c-nav{display:flex;justify-content:center;gap:8px;margin-top:2rem}
+.c-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;border:none;transition:all .2s}
+.c-dot.on{background:#93B9FF;width:22px;border-radius:3px}
+
+/* ── WORKFLOW ── */
+.wf-section{background:var(--navy2);padding:80px 0}
+.wf-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem}
+.wf-section .eyebrow{color:#93B9FF}
+.wf-section .sec-h{color:#fff}
+.wf-section .sec-p{color:rgba(255,255,255,0.38)}
+.wf-steps{display:grid;grid-template-columns:repeat(6,1fr);margin-top:2.5rem;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden}
+.wf-step{background:rgba(255,255,255,0.03);padding:1.4rem 1.1rem;border-right:1px solid rgba(255,255,255,0.06)}
+.wf-step:last-child{border-right:none}
+.wf-n{font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;margin-bottom:.65rem}
+.wf-d{font-size:12px;letter-spacing:1.5px;margin-bottom:.65rem;color:rgba(255,255,255,0.65);line-height:1;font-family:monospace}
+.wf-d .e{color:rgba(255,255,255,0.1)}.wf-d .x{color:rgba(255,255,255,0.28)}
+.wf-step h4{font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:.3rem;letter-spacing:-0.01em}
+.wf-step p{font-size:11px;color:rgba(255,255,255,0.26);line-height:1.55}
+.wf-step.act{background:rgba(43,92,230,0.12);border-top:2px solid #93B9FF}
+.wf-step.act .wf-n{color:#93B9FF}
+.wf-step.act h4{color:#fff}
+
+/* ── STATS ── */
+.stats{background:var(--accent);padding:56px 0}
+.stats-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem}
+.stat{text-align:center}
+.stat-n{font-size:2.6rem;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.04em}
+.stat-l{font-size:11px;color:rgba(255,255,255,0.55);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── CTA ── */
+.cta{background:var(--bg);padding:96px 2.5rem;text-align:center}
+.cta-inner{max-width:520px;margin:0 auto}
+.cta h2{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;color:var(--ink);letter-spacing:-0.04em;margin-bottom:1rem;line-height:1.12}
+.cta p{font-size:15px;color:var(--ink3);margin-bottom:2rem;letter-spacing:-0.01em;line-height:1.7}
+.btn-cta{background:var(--accent);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;transition:background .15s;display:inline-block}
+.btn-cta:hover{background:var(--accent2)}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);border-top:1px solid rgba(255,255,255,0.05);padding:0}
+.footer-inner{max-width:1080px;margin:0 auto;padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.ft-logo{display:flex;align-items:center;gap:9px}
+.ft-logo img{height:30px;width:auto}
+.ft-logo-text{font-size:15px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:-0.02em}
+footer p{font-size:12px;color:rgba(255,255,255,0.22)}
+footer nav a{font-size:12px;color:rgba(255,255,255,0.28);text-decoration:none;margin-left:1.5rem;transition:color .15s}
+footer nav a:hover{color:#fff}
+
+@media(max-width:768px){
+  .nav-inner{padding:0 1.25rem}.nav-links{display:none}
+  .hero{padding:72px 0 56px}.hero-inner{grid-template-columns:1fr;gap:2.5rem;padding:0 1.25rem}
+  .section{padding:60px 0}.section-inner{padding:0 1.25rem}.feat-grid{grid-template-columns:1fr}
+  .carousel-section{padding:60px 0}.carousel-inner{padding:0 1.25rem}
+  .c-tabs{flex-direction:column}
+  .c-panel.on{grid-template-columns:1fr}
+  .wf-section{padding:60px 0}.wf-inner{padding:0 1.25rem}
+  .wf-steps{grid-template-columns:1fr 1fr}
+  .wf-step{border-right:none;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .wf-step:nth-child(odd){border-right:1px solid rgba(255,255,255,0.05)}
+  .stats{padding:56px 0}.stats-inner{grid-template-columns:repeat(2,1fr);padding:0 1.25rem}
+  .cta{padding:56px 1.25rem}
+  .strip-inner{flex-direction:column;gap:1.5rem}
+  .footer-inner{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+        <img src="logo.png" alt="Code Five">
+        <span class="nav-logo-text">Flow<span>Biz</span></span>
+      </div>
+    <ul class="nav-links">
+      <li><a href="#features">Funkcionalnosti</a></li>
+      <li><a href="#carousel">Aplikacija</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="#kontakt" class="nav-cta">Zatražite demo &rarr;</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid-bg">
+    <svg width="100%" height="100%" viewBox="0 0 1440 680" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="rgba(43,92,230,0.05)" stroke-width="1">
+        <line x1="0" y1="90" x2="1440" y2="90"/><line x1="0" y1="180" x2="1440" y2="180"/>
+        <line x1="0" y1="270" x2="1440" y2="270"/><line x1="0" y1="360" x2="1440" y2="360"/>
+        <line x1="0" y1="450" x2="1440" y2="450"/><line x1="0" y1="540" x2="1440" y2="540"/>
+        <line x1="160" y1="0" x2="160" y2="680"/><line x1="320" y1="0" x2="320" y2="680"/>
+        <line x1="480" y1="0" x2="480" y2="680"/><line x1="640" y1="0" x2="640" y2="680"/>
+        <line x1="800" y1="0" x2="800" y2="680"/><line x1="960" y1="0" x2="960" y2="680"/>
+        <line x1="1120" y1="0" x2="1120" y2="680"/><line x1="1280" y1="0" x2="1280" y2="680"/>
+      </g>
+      <!-- PP aparat silhouette -->
+      <g transform="translate(1170,30) scale(0.8)" opacity="0.045" fill="#2B5CE6">
+        <ellipse cx="80" cy="110" rx="55" ry="18"/>
+        <rect x="25" y="108" width="110" height="380" rx="55"/>
+        <ellipse cx="80" cy="488" rx="55" ry="18"/>
+        <rect x="55" y="72" width="50" height="50" rx="8"/>
+        <ellipse cx="80" cy="72" rx="25" ry="10"/>
+        <rect x="30" y="42" width="100" height="18" rx="9"/>
+        <rect x="72" y="18" width="16" height="30" rx="8"/>
+        <path d="M130 60 Q200 40 220 100 Q240 155 195 175" stroke="#2B5CE6" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <ellipse cx="80" cy="498" rx="70" ry="22"/>
+        <circle cx="80" cy="160" r="22" stroke="#2B5CE6" stroke-width="7" fill="none"/>
+        <line x1="80" y1="145" x2="80" y2="160" stroke="#2B5CE6" stroke-width="5" stroke-linecap="round"/>
+        <line x1="80" y1="160" x2="94" y2="168" stroke="#2B5CE6" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <circle cx="1250" cy="340" r="250" fill="url(#hg)"/>
+      <defs><radialGradient id="hg" cx="50%" cy="50%"><stop offset="0%" stop-color="#2B5CE6" stop-opacity="0.07"/><stop offset="100%" stop-color="#2B5CE6" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="910" cy="130" r="2.5" fill="rgba(43,92,230,0.25)"/>
+      <circle cx="1060" cy="75" r="1.5" fill="rgba(43,92,230,0.2)"/>
+      <circle cx="1340" cy="200" r="2" fill="rgba(43,92,230,0.22)"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-pill"><span class="hero-pill-dot"></span>Protivpožarna zaštita &middot; SaaS &middot; RS</div>
+      <h1>Kontrolisanje.<br>Dokumentacija.<br><em>Automatski.</em></h1>
+      <p class="hero-sub">FlowBiz digitalizuje celokupan proces kontrolisanja PP sistema — od evidencije protivpožarnih uređaja do zakonski usklađenih isprava.</p>
+      <div class="hero-btns">
+        <a href="#kontakt" class="btn-fill">Zatražite demo &rarr;</a>
+        <a href="#carousel" class="btn-outline">Pogledajte aplikaciju</a>
+      </div>
+      <div class="hero-trust"><span class="trust-dot"></span>Usklađeno sa pravilnicima RS &nbsp;&middot;&nbsp; Multi-tenant &nbsp;&middot;&nbsp; Offline rad</div>
+    </div>
+    <div class="app-mock">
+      <div class="mock-bar"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="mock-label">FlowBiz &mdash; Plan dospeća</span></div>
+      <div class="kpis">
+        <div class="kpi"><div class="kv kv-r">3</div><div class="kl">Kritično &le;7d</div></div>
+        <div class="kpi"><div class="kv kv-a">11</div><div class="kl">Ističe &lt;30d</div></div>
+        <div class="kpi"><div class="kv kv-g">42</div><div class="kl">Aktivno</div></div>
+        <div class="kpi"><div class="kv kv-s">7</div><div class="kl">Isteklo</div></div>
+      </div>
+      <div class="tbar"><span class="tbar-t">Isprave</span><span class="tag tag-b">Danas</span></div>
+      <table class="mt">
+        <thead><tr><th>Isprava</th><th>Klijent</th><th>Status</th><th>Rok</th></tr></thead>
+        <tbody>
+          <tr><td class="td-b">#2024-041</td><td>Metaloprom d.o.o.</td><td><span class="tag tag-r">Kritično</span></td><td style="color:var(--red);font-weight:600">3 dana</td></tr>
+          <tr><td class="td-b">#2024-038</td><td>Grad Novi Sad</td><td><span class="tag tag-g">Završeno</span></td><td style="color:var(--ink3)">&mdash;</td></tr>
+          <tr><td class="td-b">#2024-036</td><td>Beograd Arena</td><td><span class="tag tag-a">U pripremi</span></td><td style="color:var(--amber);font-weight:600">18 dana</td></tr>
+          <tr><td class="td-b">#2024-033</td><td>TC Ušće</td><td><span class="tag tag-b">Kontrola</span></td><td style="color:var(--ink2)">25 dana</td></tr>
+        </tbody>
+      </table>
+      <div class="wf-bar">
+        <span style="font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">Status</span>
+        <span class="wf-mono"><span>&#9679;&#9679;&#9679;</span><span class="em">&#9675;&#9675;</span></span>
+        <span class="wf-tag">Kontrola u toku</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-text"><strong>Namenjeno ovlašćenim firmama</strong> za kontrolisanje protivpožarnih sistema u Republici Srbiji</div>
+    <div class="strip-icons">
+      <div class="strip-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 6 6 7 9c-2-1-3-3-2.5-5C2 6 1 10 3 13c1 2 3 3.5 5 4-.5 1-1.5 1.5-2.5 1.5 2 2 5 2 7 0 3-3 4-7 2-10z"/></svg>PP aparati</div>
+      <div class="strip-icon"><svg viewBox="0 0 24 24"><rect x="8" y="9" width="8" height="12" rx="2"/><path d="M10 9V6a2 2 0 014 0v3"/><path d="M5 14h3M16 14h3"/><rect x="5" y="20" width="14" height="2" rx="1"/><ellipse cx="12" cy="5" rx="3" ry="2"/></svg>Hidranti</div>
+      <div class="strip-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>Isprave</div>
+      <div class="strip-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Pravilnici RS</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section" id="features" style="background:var(--bg)">
+  <div class="section-inner">
+    <div class="eyebrow">Funkcionalnosti</div>
+    <div class="sec-h">Digitalna kontrola.<br>Zakonska isprava.</div>
+    <div class="sec-p" style="max-width:none;white-space:nowrap">Dizajnirano za brzinu rada kontrolora na terenu i preciznost administratora u kancelariji.</div>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div><h3>Zakonska usklađenost</h3><p>Automatska primena pravilnika RS. Svaka isprava generiše se prema važećim propisima.</p></div>
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><h3>Plan dospeća</h3><p>Pregled svih isprava sa KPI indikatorima. Kritični rokovi istaknuti, akcija dostupna na jedan klik.</p></div>
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><h3>PDF generisanje</h3><p>Zakonski usklađena isprava generisana direktno iz aplikacije — bez ručnog popunjavanja obrazaca.</p></div>
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div><h3>Audit trail</h3><p>Svaka izmena zabeležena. Ko je, kada i šta promenio — kompletna istorija za svaku ispravu.</p></div>
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Višekorisničke uloge</h3><p>Administrator, kontrolor, koordinator, direktor — granularne dozvole za svaku ulogu u firmi.</p></div>
+      <div class="feat"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg></div><h3>Offline podrška</h3><p>Kontrolori na terenu rade bez internet konekcije. Podaci se sinhronizuju čim mreža postane dostupna.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CAROUSEL -->
+<div class="carousel-section" id="carousel">
+  <div class="carousel-inner">
+    <div class="eyebrow">Aplikacija u akciji</div>
+    <div class="sec-h">Vidite pre nego što odlučite.</div>
+    <div class="sec-p">Pravi ekrani i dokumenta generisana iz FlowBiz-a — onakvi kakvi izgledaju u svakodnevnom radu.</div>
+
+    <div class="c-tabs">
+      <button class="c-tab on" onclick="show(0)">Isprava (ekran)</button>
+      <button class="c-tab" onclick="show(1)">Audit trail</button>
+      <button class="c-tab" onclick="show(2)">Merenja</button>
+      <button class="c-tab" onclick="show(3)">Metode</button>
+      <button class="c-tab" onclick="show(4)">PDF &mdash; PP aparati</button>
+      <button class="c-tab" onclick="show(5)">PDF &mdash; Hidrantska mreža</button>
+    </div>
+
+    <!-- 0: Isprava ekran -->
+    <div class="c-panel on" id="p0">
+      <div class="c-info">
+        <div class="c-num">01 / 06</div>
+        <div class="c-title">Isprava o kontrolisanju</div>
+        <div class="c-desc">Centralni dokument sistema. Sadrži sve podatke o klijentu, objektu, opremi i zaključku kontrole — automatski generisan i zakonski usklađen.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Auto-generisanje broja isprave</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Zaključak ISPRAVNO / NEISPRAVNO</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Pregled opreme i etalona sa statusima</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Štampanje i PDF u jedan klik</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/isprave/1/2026</div></div>
+        <img src="screen1.png" class="b-img" alt="Isprava">
+      </div>
+    </div>
+
+    <!-- 1: Audit -->
+    <div class="c-panel" id="p1">
+      <div class="c-info">
+        <div class="c-num">02 / 06</div>
+        <div class="c-title">Istorija izmena</div>
+        <div class="c-desc">Kompletna revizija svake isprave — ko je, kada i šta promenio. Neophodno za inspekcije i internu kontrolu kvaliteta.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Timeline prikaz svih akcija</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Evidencija promena statusa</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Identifikacija korisnika za svaku izmenu</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Nepromenljiva istorija za inspekcije</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/isprave/1/2026/audit</div></div>
+        <img src="screen2.png" class="b-img" alt="Audit trail">
+      </div>
+    </div>
+
+    <!-- 2: Merenja -->
+    <div class="c-panel" id="p2">
+      <div class="c-info">
+        <div class="c-num">03 / 06</div>
+        <div class="c-title">Merenja hidranta</div>
+        <div class="c-desc">Unos mernih vrednosti direktno na terenu. Automatski proračun protoka i validacija rezultata prema propisanim metodama ispitivanja.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Statički i dinamički pritisak</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Automatski proračun protoka (L/s)</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Validacija ISPRAVNO / NEISPRAVNO</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Podrška za SNH, SPH, UZH tipove</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/radni-nalog/merenja</div></div>
+        <img src="screen3.png" class="b-img" alt="Merenja">
+      </div>
+    </div>
+
+    <!-- 3: Metode -->
+    <div class="c-panel" id="p3">
+      <div class="c-info">
+        <div class="c-num">04 / 06</div>
+        <div class="c-title">Metode ispitivanja</div>
+        <div class="c-desc">Pregled svih ispitanih uređaja sa jasnim statusom za svaki. Kontrolor odmah vidi koji hidranti su ispravni, a koji zahtevaju pažnju.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Lista svih ispitanih uređaja</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Jasno istaknuti neispravni uređaji</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Lokacija svakog uređaja u objektu</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Brzi pristup detaljima merenja</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/radni-nalog/metode</div></div>
+        <img src="screen4.png" class="b-img" alt="Metode">
+      </div>
+    </div>
+
+    <!-- 4: PDF PP -->
+    <div class="c-panel" id="p4">
+      <div class="c-info">
+        <div class="c-num">05 / 06</div>
+        <div class="c-title">Generisana isprava — PP aparati</div>
+        <div class="c-desc">Zakonski usklađen dokument, automatski generisan iz aplikacije. Sadrži sve propisane podatke prema obrascu OB-44.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Obrazac OB-44, Izdanje I3</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Podaci o opremi i etalonima</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Ocena ispravnosti po uređaju</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Potpisi kompetentnih lica</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/isprave/2/2026/pdf</div></div>
+        <div style="padding:16px;background:#fff">
+          <div class="pdf-card">
+            <div class="pdf-header">
+              <span class="pdf-header-title">Isprava o kontrolisanju PP aparata &nbsp;&middot;&nbsp; OB-44</span>
+              <span class="pdf-header-badge">Isprava završena</span>
+            </div>
+            <div class="pdf-body">
+              <div class="pdf-row"><span class="pdf-key">Evidencijski broj</span><span class="pdf-val">2/2026</span></div>
+              <div class="pdf-row"><span class="pdf-key">Vrsta ispitivanja</span><span class="pdf-val">Periodično</span></div>
+              <div class="pdf-row"><span class="pdf-key">Datum isprave</span><span class="pdf-val">17.10.2025.</span></div>
+              <div class="pdf-row"><span class="pdf-key">Korisnik</span><span class="pdf-val">VLADEX DOO KRALJEVO</span></div>
+              <div class="pdf-row"><span class="pdf-key">Pravno lice</span><span class="pdf-val">VATROSERVIS ĆUPRIJA DOO</span></div>
+              <div class="pdf-row"><span class="pdf-key">Rešenje</span><span class="pdf-val">07 broj 217-1988/23</span></div>
+              <div class="pdf-section">Ocena ispravnosti uređaja</div>
+              <table class="pdf-table">
+                <thead><tr><th>Tip</th><th>Proizvođač</th><th>Fab. br.</th><th>Ispravno</th></tr></thead>
+                <tbody>
+                  <tr><td>CO2-25</td><td>CERVINKA</td><td>898342...</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                  <tr><td>S-12A</td><td>MOBIAK</td><td>787927...</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                  <tr><td>S-50</td><td>TODOROVIC</td><td>T90870...</td><td style="color:var(--red);font-weight:600">NE</td></tr>
+                  <tr><td>S-6A</td><td>ANTIFIRE</td><td>896926...</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                  <tr><td>P-9</td><td>BAVARIA</td><td>809234...</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                </tbody>
+              </table>
+              <div class="pdf-verdict nok" style="margin-top:14px">
+                <span class="pdf-verdict-label">Zaključak</span>
+                <span class="pdf-verdict-val">1 NEISPRAVNO &mdash; servisiranje</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: PDF Hidrant -->
+    <div class="c-panel" id="p5">
+      <div class="c-info">
+        <div class="c-num">06 / 06</div>
+        <div class="c-title">Generisana isprava — Hidrantska mreža</div>
+        <div class="c-desc">Automatski generisana isprava za kontrolisanje instalacija hidrantske mreže. Sadrži merenja pritiska i protoka za svaki hidrant u objektu.</div>
+        <div class="c-pts">
+          <div class="c-pt"><span class="c-pt-dot"></span>Obrazac OB-45, Izdanje I3</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Merenja pritiska i protoka po hidrantu</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Usklađenost sa Pravilnikom SG RS 3/18</div>
+          <div class="c-pt"><span class="c-pt-dot"></span>Ocena ispravnosti instalacije</div>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar"><div class="b-dots"><div class="b-dot b-dot-r"></div><div class="b-dot b-dot-y"></div><div class="b-dot b-dot-g"></div></div><div class="b-url">app.flowbiz.rs/isprave/3/2026/pdf</div></div>
+        <div style="padding:16px;background:#fff">
+          <div class="pdf-card">
+            <div class="pdf-header">
+              <span class="pdf-header-title">Isprava o kontrolisanju hidrantske mreže &nbsp;&middot;&nbsp; OB-45</span>
+              <span class="pdf-header-badge">Isprava završena</span>
+            </div>
+            <div class="pdf-body">
+              <div class="pdf-row"><span class="pdf-key">Evidencijski broj</span><span class="pdf-val">3/2026</span></div>
+              <div class="pdf-row"><span class="pdf-key">Datum isprave</span><span class="pdf-val">04.04.2026.</span></div>
+              <div class="pdf-row"><span class="pdf-key">Korisnik</span><span class="pdf-val">SHANGDONG TECHNOLOGY Co. Ltd</span></div>
+              <div class="pdf-row"><span class="pdf-key">Objekat</span><span class="pdf-val">MAGACIN A, Subotica</span></div>
+              <div class="pdf-section">Rezultati merenja</div>
+              <table class="pdf-table">
+                <thead><tr><th>Lokacija</th><th>Stat. [bar]</th><th>Din. [bar]</th><th>Q [l/s]</th><th>OK</th></tr></thead>
+                <tbody>
+                  <tr><td>Kod rampe</td><td>4.50</td><td>3.20</td><td>5.06</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                  <tr><td>Ulaz magacin</td><td>5.00</td><td>2.90</td><td>4.82</td><td style="color:var(--red);font-weight:600">NE</td></tr>
+                  <tr><td>Trafo stanica</td><td>4.50</td><td>3.20</td><td>5.06</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                  <tr><td>VIP parking</td><td>4.00</td><td>2.00</td><td>4.00</td><td style="color:var(--red);font-weight:600">NE</td></tr>
+                  <tr><td>Hodnik PZ</td><td>3.50</td><td>2.10</td><td>2.31</td><td style="color:var(--green);font-weight:600">DA</td></tr>
+                </tbody>
+              </table>
+              <div class="pdf-verdict" style="margin-top:14px">
+                <span class="pdf-verdict-label">Zaključak instalacije</span>
+                <span class="pdf-verdict-val">ISPRAVNO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="c-nav">
+      <button class="c-dot on" onclick="show(0)"></button>
+      <button class="c-dot" onclick="show(1)"></button>
+      <button class="c-dot" onclick="show(2)"></button>
+      <button class="c-dot" onclick="show(3)"></button>
+      <button class="c-dot" onclick="show(4)"></button>
+      <button class="c-dot" onclick="show(5)"></button>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div class="wf-section" id="workflow">
+  <div class="wf-inner">
+    <div class="eyebrow">Workflow</div>
+    <div class="sec-h">Od rezervacije do<br>završene isprave.</div>
+    <div class="sec-p">Svaka isprava prolazi kroz jasan, kontrolisan tok — bez propuštenih koraka i nejasnih odgovornosti.</div>
+    <div class="wf-steps">
+      <div class="wf-step"><div class="wf-n">01</div><div class="wf-d"><span>&#9679;</span><span class="e">&#9675;&#9675;&#9675;&#9675;</span></div><h4>U pripremi</h4><p>Rezervacija broja, unos podataka, zahtev za kontrolisanje.</p></div>
+      <div class="wf-step"><div class="wf-n">02</div><div class="wf-d"><span>&#9679;&#9679;</span><span class="e">&#9675;&#9675;&#9675;</span></div><h4>Spremno</h4><p>Zahtev poslat klijentu. Čeka se potvrda termina.</p></div>
+      <div class="wf-step act"><div class="wf-n">03</div><div class="wf-d"><span>&#9679;&#9679;&#9679;</span><span class="e">&#9675;&#9675;</span></div><h4>Kontrola u toku</h4><p>Radni nalog aktivan. Kontrolor unosi merenja i rezultate.</p></div>
+      <div class="wf-step"><div class="wf-n">04</div><div class="wf-d"><span>&#9679;&#9679;&#9679;&#9679;</span><span class="e">&#9675;</span></div><h4>Adm. obrada</h4><p>Provera, PDF preview u modalu, korekcije pre finalizacije.</p></div>
+      <div class="wf-step"><div class="wf-n">05</div><div class="wf-d"><span>&#9679;&#9679;&#9679;&#9679;&#9679;</span></div><h4>Završeno</h4><p>PDF generisan, podaci zaključani, isprava u istoriji.</p></div>
+      <div class="wf-step"><div class="wf-n">&mdash;</div><div class="wf-d"><span>&#9679;&#9679;&#9679;</span><span class="x">&#10005;</span><span class="e">&#9675;</span></div><h4>Otkazano</h4><p>Klijent odbio ili isprava otkazana. Evidentirano u sistemu.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-n">200+</div><div class="stat-l">Objekata mesečno</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Usklađenost RS</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">Ručnih grešaka</div></div>
+    <div class="stat"><div class="stat-n">&infin;</div><div class="stat-l">Audit istorija</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta" id="kontakt">
+  <div class="cta-inner">
+    <h2>Spremi za digitalizaciju?</h2>
+    <p>Pokažite nam vaš trenutni proces &mdash; predložićemo implementaciju bez komplikacija.</p>
+    <a href="/cdn-cgi/l/email-protection#ceada1a0baafadba8eada1aaaba8a7b8abe0bcbd" class="btn-cta">Zatražite demo &rarr;</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="ft-logo">
+      <img src="logo-dark.png" alt="Code Five">
+      <span class="ft-logo-text">FlowBiz</span>
+    </div>
+    <p>Sva prava zadržana &copy; 2025 Code Five</p>
+    <nav>
+      <a href="https://codefive.rs">codefive.rs</a>
+      <a href="/cdn-cgi/l/email-protection#4f2c20213b2e2c3b0f2c202b2a2926392a613d3c">Kontakt</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function show(i){
+  document.querySelectorAll(".c-panel").forEach(function(p,j){p.classList.toggle("on",j===i);});
+  document.querySelectorAll(".c-tab").forEach(function(t,j){t.classList.toggle("on",j===i);});
+  document.querySelectorAll(".c-dot").forEach(function(d,j){d.classList.toggle("on",j===i);});
+}
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll(".c-tab").forEach(function(tab,i){
+    tab.addEventListener("click",function(){show(i);});
+  });
+  document.querySelectorAll(".c-dot").forEach(function(dot,i){
+    dot.addEventListener("click",function(){show(i);});
+  });
+});
+</script>
+</body>
+</html>
