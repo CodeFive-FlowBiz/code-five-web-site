@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/codefive-website:latest
+      IMAGE_NAME: ghcr.io/codefive-flowbiz/codefive-website:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Build and push image
