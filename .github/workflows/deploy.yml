@@ -1,21 +1,21 @@
-name: Build and Push CodeFive Website
+name: Deploy CodeFive Website to PROD (Hetzner)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ghcr.io/codefive-flowbiz/codefive-website:latest
-
 jobs:
-  build:
+  deploy:
+    name: Build & Deploy to PROD
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/codefive-website:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,17 +23,33 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GHCR
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PAT }}
 
-      - name: Build and Push Docker image
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ${{ env.IMAGE_NAME }}
           no-cache: true
+
+      - name: Deploy to Hetzner PROD
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          port: 2222
+          username: deploy
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            set -e
+            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            cd /opt/stack/apps/codefive-web
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker logout ghcr.io || true
+            echo "PROD deployment complete."
